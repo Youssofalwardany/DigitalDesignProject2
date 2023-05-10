@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05/10/2023 03:36:30 PM
+// Create Date: 05/10/2023 06:41:15 PM
 // Design Name: 
-// Module Name: MUX
+// Module Name: twos7bit
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,10 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mux (x, y, sel, out);
-input [6:0] x; 
-input [6:0] y;
-input sel;
-output [6:0] out;
-assign out = (x & sel) | (y & ~sel);
+module twos_complement (
+    input [6:0] input_number,
+    output [6:0] twos_comp
+);
+    assign twos_complement = ~input_number + 1'b1;
 endmodule

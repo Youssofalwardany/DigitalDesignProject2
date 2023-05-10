@@ -22,7 +22,6 @@
 
 module shift_right_register(
     input clk,
-    input reset,
     input load_en,
     input shift_en,
     input [N-1:0] data_in,
