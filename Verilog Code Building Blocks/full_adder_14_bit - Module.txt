@@ -1,1 +1,16 @@
+// file: full_adder.v
+// author: @malaa10
 
+`timescale 1ns/1ns
+
+module full_adder_14bit(
+    input [13:0] a,
+    input [13:0] b,
+    input cin,
+    output reg [13:0] sum,
+    output reg cout
+);
+always @* begin
+    {cout, sum} = a + b + cin;
+end
+endmodule
