@@ -1,0 +1,11 @@
+// file: twos_comp_14bit.v
+// author: @malaa10
+
+`timescale 1ns/1ns
+
+module twos_complement (
+    input [13:0] input_number,
+    output [13:0] twos_complement
+);
+    assign twos_complement = ~input_number + 1'b1;
+endmodule

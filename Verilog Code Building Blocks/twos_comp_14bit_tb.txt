@@ -1,0 +1,59 @@
+// file: twos_comp_14bit_tb.v
+// author: @malaa10
+// Testbench for twos_complement
+
+`timescale 1ns/1ns
+
+
+module tb_twos_complement;
+
+    // Inputs
+    reg [13:0] input_number;
+    
+    // Outputs
+    wire [13:0] twos_complement;
+    
+    // Instantiate the module
+    twos_complement dut (
+        .input_number(input_number),
+        .twos_complement(twos_complement)
+    );
+    
+    // Stimulus generation
+    initial begin
+        // Test with positive input number
+        input_number = 14'b01011010010101;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // Test with negative input number
+        input_number = 14'b11001101100110;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // Test with zero input number
+        input_number = 14'b00000000000000;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // Test with maximum positive input number
+        input_number = 14'b01111111111111;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // Test with minimum negative input number
+        input_number = 14'b10000000000000;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // Test with random input number
+        input_number = $random;
+        #10;
+        $display("Input number = %b, 2's complement = %b", input_number, twos_complement);
+        
+        // End the simulation
+        #10;
+        $finish;
+    end
+    
+endmodule
