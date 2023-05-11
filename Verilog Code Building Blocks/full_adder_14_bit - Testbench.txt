@@ -50,48 +50,15 @@ endmodule
 
 
 
-module bit14carryadder_tb;
+module DataReg(input clk, rst, enable, [13:0] in, output reg [13:0] out);
 
-  // Inputs
-  reg cin;
-  reg [13:0] a;
-  reg [13:0] b;
-
-  // Outputs
-  wire [13:0] s;
-
-  // Instantiate the Unit Under Test (UUT)
-  bit14carryadder uut (
-    .cin(cin),
-    .a(a),
-    .b(b),
-    .s(s)
-  );
-
-  initial begin
-    // Initialize inputs
-    cin = 0;
-    a = 14'h0;
-    b = 14'h0;
-
-    // Wait for 100ns for the inputs to settle
-    #100;
-
-    // Add some test cases here
-    // Example:
-    a = 14'h1234;
-    b = 14'h5678;
-    cin = 1'b1;
-    #100;
-    // Check the output
-    $display("s = %h", s);
-
-    // Add more test cases here
-    // ...
-
-    // End the simulation
-    $finish;
-  end
-
+always @(posedge clk, posedge rst)
+    if (rst) begin
+        out <= 14'b0;
+    end else if (enable) begin
+        out <= in;
+    end
+    
 endmodule
+
 
