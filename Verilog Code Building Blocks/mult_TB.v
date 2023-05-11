@@ -1,56 +1,38 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 05/10/2023 03:48:07 PM
-// Design Name: 
-// Module Name: RSRsim
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-module mult_tb;
+module Multiplier_tb;
+    reg clock;
+    reg start;
+    reg [7:0] multiplier;
+    reg [7:0] multiplicand;
+    wire sign;
+    wire zflag;
+    wire [13:0] result;
 
+    Multiplier multiplier_inst(
+        .clock(clock),
+        .start(start),
+        .multiplier(multiplier),
+        .multiplicand(multiplicand),
+        .sign(sign),
+        .zflag(zflag),
+        .result(result)
+    );
 
-reg clk, start;
-reg [7:0] multiplier,  multiplicand;
-wire [13:0] result, sign, zflag;
+    initial begin
+        clock = 0;
+        start = 0;
+        multiplier = 8'd3;
+        multiplicand = 8'd10;
+        #10 start = 1;
+        #10 start = 0;
+        #200 $finish;
+    end
 
-Multiplier dut(clk, start, multiplier, multiplicand, result, sign, zflag);
+    always #5 clock = ~clock;
 
-initial begin
-    clk = 1'b0;
-    forever #5 clk = ~clk; // create a 10ns clock cycle
-end
-
-initial begin
-    reset = 1'b1;
-    load_en = 1'b0;
-    shift_en = 1'b0;
-    data_in = {N{1'b0}};
-
-    #20 start = 1'b0;  // release reset after 100ns
-    #10 start = 1'b1; // load data on first cycle
-    #10 multiplier = 8'b00000011;
-    #10 multiplicand = 8'b00001010; // turn off load enable
-
-    // shift data for 10 cycles
-    repeat (10) begin
+    initial begin
+        $dumpfile("Multiplier_tb.vcd");
+        $dumpvars(0, multiplier_inst);
         #10;
     end
 
-    // finish simulation
-    #10 $finish;
-end
-
 endmodule
-
