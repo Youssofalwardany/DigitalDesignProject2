@@ -50,11 +50,48 @@ endmodule
 
 
 
-module bit14carryadder(input cin, [13:0] a, [13:0]b, output [13:0] s);
-wire cout[3:0];
-bit8carryadder add1 (a[7:0], b[7:0], cin, s[7:0], cout[0]);
-bit4carryadder add2 (a[11:8], b[11:8], cout[0], s[11:8], cout[1]); 
-fulladder adder1(.in({a[12],b[12],cout[1]}), .out({cout[2], s[12]}));
-fulladder adder2(.in({a[13],b[13],cout[3]}), .out({cout[3], s[13]}));
+module bit14carryadder_tb;
+
+  // Inputs
+  reg cin;
+  reg [13:0] a;
+  reg [13:0] b;
+
+  // Outputs
+  wire [13:0] s;
+
+  // Instantiate the Unit Under Test (UUT)
+  bit14carryadder uut (
+    .cin(cin),
+    .a(a),
+    .b(b),
+    .s(s)
+  );
+
+  initial begin
+    // Initialize inputs
+    cin = 0;
+    a = 14'h0;
+    b = 14'h0;
+
+    // Wait for 100ns for the inputs to settle
+    #100;
+
+    // Add some test cases here
+    // Example:
+    a = 14'h1234;
+    b = 14'h5678;
+    cin = 1'b1;
+    #100;
+    // Check the output
+    $display("s = %h", s);
+
+    // Add more test cases here
+    // ...
+
+    // End the simulation
+    $finish;
+  end
 
 endmodule
+
