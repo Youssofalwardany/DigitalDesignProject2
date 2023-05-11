@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05/10/2023 03:47:01 PM
+// Create Date: 05/11/2023 07:06:15 PM
 // Design Name: 
-// Module Name: RSR
+// Module Name: RSL
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module shift_left_register(
+module shift_right_register(
     input clk,
     input load_en,
     input shift_en,
@@ -28,13 +28,15 @@ module shift_left_register(
     output reg [N-1:0] data_out
 );
 
-parameter N = 14;
+parameter N = 7;
+
+
 
 always @(posedge clk) begin
     if (load_en) begin
         data_out <= data_in;
     end else if (shift_en) begin
-        data_out <= {data_out[N-2:0], 1'b0};
+        data_out <= {1'b0, data_out[N-1:1]};
     end
 end
 

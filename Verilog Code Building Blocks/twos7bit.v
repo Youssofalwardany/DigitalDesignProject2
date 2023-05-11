@@ -22,7 +22,8 @@
 
 module twos_complement (
     input [6:0] input_number,
-    output [6:0] twos_comp
+    output reg [6:0] twos_comp
 );
     assign twos_complement = ~input_number + 1'b1;
+
 endmodule

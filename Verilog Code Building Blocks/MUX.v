@@ -21,9 +21,15 @@
 
 
 module mux (x, y, sel, out);
-input [6:0] x; 
-input [6:0] y;
+input [N-1:0] x; 
+input [N-1:0] y;
 input sel;
-output [6:0] out;
-assign out = (x & sel) | (y & ~sel);
+output reg [N-1:0] out;
+parameter N = 7;
+always @ (*) begin
+    if (sel == 1)
+        out <= y;
+    else
+        out <= x;
+    end
 endmodule

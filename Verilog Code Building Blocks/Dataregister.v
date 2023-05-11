@@ -23,14 +23,29 @@ input d, clk, reset_n;
 output reg q;
 output qb;
 always @(posedge clk or negedge reset_n)
-if(!reset_n)
+if(reset_n)
 q <= 1'b0;
 else
 q <= d;
 assign qb = ~q;
 endmodule
 
-module DataReg(
+
+
+module DataReg(input clk, rst, enable, [13:0] in, output reg [13:0] out);
+
+always @(posedge clk, posedge rst)
+    if (rst) begin
+        out <= 14'b0;
+    end else if (enable) begin
+        out <= in;
+    end
+    
+endmodule
+
+
+
+/*module DataReg(
   input clk, rst_n, load_en,
   input [13:0] data_in,
   output [13:0] data_out
@@ -57,3 +72,4 @@ module DataReg(
   assign data_out = q;
 
 endmodule
+*/
