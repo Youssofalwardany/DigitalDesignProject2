@@ -1,41 +1,42 @@
-// file: full_adder_tb.v
-// author: @malaa10
-// Testbench for full_adder_14bit
+module Multiplier(input clock, start, [7:0] multiplier, [7:0] multiplicand, output  sign,  output reg zflag, output reg [13:0] result);
+wire [6:0] comp_multiplier;
+wire [6:0] outputMultiplier;
+wire [6:0] outputShiftMultiplier;
+reg xnoroutput;
+wire [6:0] comp_multiplicand;
+wire [6:0] outputMultiplicand;
+wire [6:0] outputShiftMultiplicand;
+wire [13:0] output14bitadder;
+wire [13:0] output14bitadder;
+wire [13:0] outputmux3;
+wire [13:0] outputdff;
 
-`timescale 1ns/1ns
+assign sign = (multiplicand[7]  ^ multiplier[7]);
 
-module full_adder_14bit_tb;
-    reg [13:0] a;
-    reg [13:0] b;
-    reg cin;
-    wire [13:0] sum;
-    wire cout;
+twos_complement t1(.input_number(multiplier[6:0]),.twos_comp(comp_multiplier));
 
-    full_adder_14bit dut (
-        .a(a),
-        .b(b),
-        .cin(cin),
-        .sum(sum),
-        .cout(cout)
-    );
+mux m1(.x(multiplier[6:0]),.y(comp_multiplier),.sel(multiplier[7]),.out(outputMultiplier));
 
-    initial begin
-        $monitor("a=%b b=%b cin=%b sum=%b cout=%b", a, b, cin, sum, cout);
-        a = 14'b00000000000000;
-        b = 14'b00000000000000;
-        cin = 1'b0;
-        #10;
-        a = 14'b11111111111111;
-        b = 14'b00000000000000;
-        cin = 1'b0;
-        #10;
-        a = 14'b11111111111111;
-        b = 14'b11111111111111;
-        cin = 1'b0;
-        #10;
-        a = 14'b11111111111111;
-        b = 14'b11111111111111;
-        cin = 1'b1;
-        #10;
-    end
+shift_right_register #(7)sr1(clock, start, ~start, multiplier[6:0], outputShiftMultiplier[6:0]);
+
+twos_complement t2(.input_number(multiplicand[6:0]), .twos_comp(comp_multiplicand));
+
+mux m2(.x(multiplicand[6:0]), .y(comp_multiplicand), .sel(multiplicand[7]), .out(outputMultiplicand));
+
+shift_right_register #(14) sr2(clock, start, ~start, {outputMultiplicand,7'b0000000}, outputShiftMultiplicand);
+
+DataReg d1(clock, start,~zflag, outputmux3, outputdff);
+
+bit14carryadder adder(1'b0, outputShiftMultiplicand, outputdff, output14bitadder);
+
+mux #(14)m3(outputdff, output14bitadder, outputShiftMultiplier[6], outputmux3);
+
+
+always @(*) begin
+    xnoroutput <= ~(outputShiftMultiplier[0] | outputShiftMultiplier[1] | outputShiftMultiplier[2] | outputShiftMultiplier[3] | outputShiftMultiplier[4] | outputShiftMultiplier[5] | outputShiftMultiplier[6]);  
+    zflag <= xnoroutput; //fix DFF
+    result <= outputmux3;
+end
+
+
 endmodule
