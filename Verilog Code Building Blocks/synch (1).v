@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05/10/2023 06:41:15 PM
+// Create Date: 05/09/2023 12:54:28 PM
 // Design Name: 
-// Module Name: twos7bit
+// Module Name: synch
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module twos_complement (
-    input [N:0] input_number,
-    output reg [N:0] twos_comp
-);
-    parameter  N=7;
-    assign twos_complement = ~input_number + 1'b1;
-
+module synch(input clk, rst, in, output out);
+reg out, q1,q2;
+always@(posedge clk, posedge rst) begin
+ if(rst == 1'b1) begin
+ q1 <= 0;
+ q2 <= 0;
+ end
+ else begin
+ q1 <= in;
+ out <= q1;
+ end
+end
 endmodule
+
+

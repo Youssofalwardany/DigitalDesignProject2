@@ -21,14 +21,14 @@
 
 
 module Display(
-    input clk, rst, sign, digit1, digit2, digit3, output [0:6] segments, [3:0] anode_active 
+    input clk, rst, digit1, digit2, digit3, digit4, output [0:6] seg, output [3:0]anode_active
     );
     wire clkOut;
     wire [1:0]count;
     reg [3:0] num;
     clockDivider#(25000) step1(clk, rst, clkOut);
     BinaryCounter #(2,4) step2(clkOut, rst, count, 1);
-    decoder_7447 final(count,num,segments,anode_active); 
+    decoder_7447 final(count,num, anode_active, seg); 
     always @ (posedge clkOut) begin
     case(count)
     0: num = digit1;
@@ -36,6 +36,6 @@ module Display(
     2: num = digit3;
     3: num = digit4;
     endcase
-    end 
+    end
 endmodule
 

@@ -20,9 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module decoder_7447(input [3:0] bcd, output reg [6:0] segments);
+module decoder_7447(input [1:0]en, input [3:0] bcd, output reg [3:0]anode_active, output reg [6:0] segments);
 
 always @(*) begin
+        case(en)
+     0: anode_active = 4'b0111;
+     1: anode_active = 4'b1011;
+     2: anode_active = 4'b1101;
+     3: anode_active = 4'b1110;
+     endcase
     case (bcd)
         0: segments = 7'b1000000; // 0
         1: segments = 7'b1111001; // 1

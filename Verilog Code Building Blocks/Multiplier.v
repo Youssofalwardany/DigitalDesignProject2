@@ -38,9 +38,14 @@ mux #(8)m1(.x(multiplier[7:0]),.y({~multiplier[7:0] + 1'b1}),.sel(multiplier[7])
 
 shift_right_register #(7)sr1(clock, start, ~start, outputMultiplier[6:0], outputShiftMultiplier);
 
+//twos_complement t2(.input_number(multiplicand[6:0]), .twos_comp(comp_multiplicand));
+
 mux #(8)m2(.x(multiplicand[7:0]), .y({~multiplicand[7:0] + 1'b1}), .sel(multiplicand[7]), .out(outputMultiplicand));
 
 shift_left_register#(14) sr2(clock, start, ~start, {7'b0000000, outputMultiplicand[6:0]}, outputShiftMultiplicand);
+
+//bit14carryadder adder(1'b0, multiplier, multiplier, output14bitadder);
+
 
 mux #(14)m3(outputdff, output14bitadder, outputShiftMultiplier[0], outputmux3);
 DataReg d1(clock, start,~zflag, outputmux3, outputdff);
