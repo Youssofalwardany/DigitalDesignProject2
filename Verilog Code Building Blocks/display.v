@@ -21,7 +21,7 @@
 
 
 module Display(
-    input clk, rst, digit1, digit2, digit3, digit4, output [0:6] seg, output [3:0]anode_active
+    input clk, rst, [3:0]digit1, [3:0]digit2, [3:0]digit3, [3:0]digit4, output [0:6] seg, output [3:0]anode_active
     );
     wire clkOut;
     wire [1:0]count;
@@ -31,10 +31,10 @@ module Display(
     decoder_7447 final(count,num, anode_active, seg); 
     always @ (posedge clkOut) begin
     case(count)
-    0: num = digit1;
-    1: num = digit2;
-    2: num = digit3;
-    3: num = digit4;
+    0: num = digit4;
+    1: num = digit3;
+    2: num = digit2;
+    3: num = digit1;
     endcase
     end
 endmodule

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module decoder_7447(input [1:0]en, input [3:0] bcd, output reg [3:0]anode_active, output reg [6:0] segments);
+module decoder_7447(input [1:0]en, input [3:0] bcd, output reg [3:0]anode_active, output reg [0:6] segments);
 
 always @(*) begin
         case(en)
@@ -30,17 +30,18 @@ always @(*) begin
      3: anode_active = 4'b1110;
      endcase
     case (bcd)
-        0: segments = 7'b1000000; // 0
-        1: segments = 7'b1111001; // 1
-        2: segments = 7'b0100100; // 2
-        3: segments = 7'b0110000; // 3
-        4: segments = 7'b0011001; // 4
-        5: segments = 7'b1101101; // 5
-        6: segments = 7'b0000010; // 6
-        7: segments = 7'b1111000; // 7
-        8: segments = 7'b0000000; // 8
-        9: segments = 7'b0010000; // 9
-        default: segments = 7'b1111111; // no display
+        0: segments = 7'b0000001; // 0 1111110 0000001
+        1: segments = 7'b1001111; // 1 0000110 1111001
+        2: segments = 7'b0010010; // 2 1101101 0010010
+        3: segments = 7'b0000110; // 3 1111001 0000110
+        4: segments = 7'b1001100; // 4 0110011 1001100
+        5: segments = 7'b0100100; // 5 1011011 0100100
+        6: segments = 7'b0100000; // 6 1011111 0100000
+        7: segments = 7'b0001111; // 7 1110000 0001111
+        8: segments = 7'b0000000; // 8 1111111 0000000
+        9: segments = 7'b0001100; // 9 1110011 0001100
+        10: segments = 7'b1111110;
+        default: segments = 7'b0000000; // no display
     endcase
 end
 
