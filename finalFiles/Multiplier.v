@@ -26,14 +26,14 @@ module Multiplier (
   input [7:0] multiplier,
   input [7:0] multiplicand,
   output [3:0] sign,
-  output zflag,
+  output reg zflag,
   output reg [13:0] result
 );
-  wire [6:0] comp_multiplier;
-  wire [7:0] outputMultiplier;
+  reg load_shifter;
+  reg shift_en;
+  reg Product_reg_en;
+  reg Product_reg_rst;
   wire [6:0] outputShiftMultiplier;
-  wire [6:0] comp_multiplicand;
-  wire [7:0] outputMultiplicand;
   wire [13:0] inputShiftMultiplicand = {7'b0000000, multiplicand[6:0]};
   wire [13:0] outputShiftMultiplicand;
   reg [13:0] output14bitadder;
@@ -44,16 +44,16 @@ module Multiplier (
 
   shift_right_register #(7) sr1 (
     .clk(clock),
-    .load_en(start),
-    .shift_en(~start),
+    .load_en(load_shifter),
+    .shift_en(shift_en),
     .data_in(multiplier[6:0]),
     .data_out(outputShiftMultiplier)
   );
 
   shift_left_register #(14) sr2 (
     .clk(clock),
-    .load_en(start),
-    .shift_en(~start),
+    .load_en(load_shifter),
+    .shift_en(shift_en),
     .data_in(inputShiftMultiplicand),
     .data_out(outputShiftMultiplicand)
   );
@@ -67,15 +67,19 @@ module Multiplier (
 
   DataReg d1 (
     .clk(clock),
-    .rst(start),
-    .enable(~zflag),
+    .rst(Product_reg_rst),
+    .enable(Product_reg_en),
     .in(outputmux3),
     .out(outputdff)
   );
-  assign zflag = ~(outputShiftMultiplier[0] | outputShiftMultiplier[1] | outputShiftMultiplier[2] | outputShiftMultiplier[3] | outputShiftMultiplier[4] | outputShiftMultiplier[5] | outputShiftMultiplier[6]);
 
   always @(*) begin
-    result <= outputdff;
+    zflag = ~(|outputShiftMultiplier);
+    result = outputdff;
+    load_shifter = start;
+    shift_en = ~start;
+    Product_reg_en = ~zflag;
+    Product_reg_rst = start;
     output14bitadder = {outputdff + outputShiftMultiplicand};
   end
 

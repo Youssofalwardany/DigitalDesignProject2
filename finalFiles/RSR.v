@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module shift_left_register(
+ module shift_left_register(
     input clk,
     input load_en,
     input shift_en,
